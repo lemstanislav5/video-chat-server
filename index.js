@@ -3,15 +3,20 @@ const { v4: uuidv4 } = require("uuid");
 const app = express();
 const server = require('http').Server(app);
 
-// app.use(express.static('public'));
-app.get('/', (req, res) => {
-    res.redirect(`/${uuidv4()}`);
+app.use(express.static('public'));
+app.get('/', (req, res) => res.redirect(`/room/${uuidv4()}/`));
+let roomPath = '/room/:room([0-9a-f-]{36})';
+app.get(roomPath + '/', function(req, res) {
+  res.sendFile(__dirname + '/public/index.html', {
+    headers: {
+      'Content-Security-Policy': [
+        'default-src \'self\'',
+        'style-src \'unsafe-inline\' \'self\'',
+        'script-src \'self\' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/',
+        'frame-src \'self\' https://www.google.com/recaptcha/',
+      ].join('; ')
+    },
+  });
 });
-app.get('/:room', (req, res) => {
-    res.render('room', { roomId: req.param.room });
-});
-// app.get('/', (req, res) => {
-//   res.status(200).send('./public/index.html')
-// });
 
-server.listen(3030);
+server.listen(3000);
