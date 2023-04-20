@@ -5,9 +5,8 @@ const server = require('http').Server(app);
 
 // app.use(express.static('public'));
 app.get('/', (req, res) => res.redirect(`/${uuidv4()}/`));
-let roomPath = '/room/:room([0-9a-f-]{36})';
 app.get('/:room', function(req, res) {
-  console.log(req, res)
+  console.log(req.params)
   res.sendFile(__dirname + '/public/index.html', {
     headers: {
       'Content-Security-Policy': [
