@@ -1,7 +1,11 @@
 const express = require("express");
-// const { ExpressPeerServer } = require("peer");
-const { PeerServer } = require("peer");
-const peerServer = PeerServer({ port: 9000, path: "/myapp" });
+//pererjs.min.js:64     GET https://localhost:9000/myapp/peerjs/id?ts=16822661494630.21034877727056567 net::ERR_CONNECTION_REFUSED
+const { ExpressPeerServer } = require("peer");
+const peerServer = ExpressPeerServer(server, {
+  debug: true,
+});
+// const { PeerServer } = require("peer");
+// const peerServer = PeerServer({ port: 9000, path: "/myapp" });
 const { v4: uuidv4 } = require("uuid");
 const app = express();
 const server = require('http').Server(app);
@@ -9,7 +13,7 @@ const io = require('socket.io')(server, {
   cors: { origin: '*' }
 });
 
-// app.use('/peerjs', peerServer);
+app.use('/peerjs', peerServer);
 app.use(express.static('public'));
 app.set('view engine', 'ejs')
 app.get('/', (req, res) => res.redirect(`/${uuidv4()}/`));
