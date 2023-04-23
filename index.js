@@ -7,15 +7,15 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server, {
   cors: { origin: '*' }
 });
-// const { ExpressPeerServer } = require("peer");
-// const peerServer = ExpressPeerServer(server, {
-//   debug: true,
-// });
-// app.use('/peerjs/*', peerServer);
-
-const { PeerServer } = require("peer");
-const peerServer = PeerServer({ port: 9000, path: "/myapp" });
+const { ExpressPeerServer } = require("peer");
+const peerServer = ExpressPeerServer(server, {
+  debug: true,
+});
 app.use('/peerjs/*', peerServer);
+
+// const { PeerServer } = require("peer");
+// const peerServer = PeerServer({ port: 9000, path: "/myapp" });
+// app.use('/peerjs/*', peerServer);
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs')
