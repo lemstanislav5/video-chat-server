@@ -11,7 +11,11 @@ const { ExpressPeerServer } = require("peer");
 const peerServer = ExpressPeerServer(server, {
   debug: true,
 });
-app.use('/peerjs/*', peerServer);
+app.use('/peerjs/*', (req, res, next) => {
+  console.log(req.body);
+  peerServer();
+  next();
+});
 
 // const { PeerServer } = require("peer");
 // const peerServer = PeerServer({ port: 9000, path: "/myapp" });
