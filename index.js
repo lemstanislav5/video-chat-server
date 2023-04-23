@@ -3,11 +3,13 @@ const { ExpressPeerServer } = require("peer");
 const { v4: uuidv4 } = require("uuid");
 const app = express();
 const server = require('http').Server(app);
+const cors = require('cors');
 const peerServer = ExpressPeerServer(server, {
     debug: true,
 });
 const io = require('socket.io')(server);
 
+app.use(cors());
 app.use('/peerjs', peerServer)
 app.use(express.static('public'));
 app.set('view engine', 'ejs')
@@ -25,8 +27,8 @@ app.get('/*/script.js', function(req, res) {
 });
 
 io.on('connection', (socket) => {
+  console.log('connection')
   socket.on('join-room', (roomId, userId) => {
-  console.log(roomId, userId)
   socket.join(roomId);
   socket.to(roomId).emit('user-connected', userId);
   });
