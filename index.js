@@ -3,29 +3,32 @@ const { ExpressPeerServer } = require("peer");
 const { v4: uuidv4 } = require("uuid");
 const app = express();
 const server = require('http').Server(app);
-// const peerServer = ExpressPeerServer(server, {
-//     debug: true,
-// });
+const peerServer = ExpressPeerServer(server, {
+    debug: true,
+});
 const io = require('socket.io')(server);
 
-// app.use(express.static('public'));
+app.use('/peerjs', peerServer)
+app.use(express.static('public'));
+app.set('view engine', 'ejs')
 app.get('/', (req, res) => res.redirect(`/${uuidv4()}/`));
 app.get('/:room', function(req, res) {
-  res.send("room: " + req.params['room'])
-  // console.log(req.params)
-  // res.status(200).send("writeFileSync data.json");
-  // let json = JSON.stringify(req);
-  // fs.writeFileSync("data.json", json);
-  // res.sendFile(__dirname + '/public/index.html', {
-  //   headers: {
-  //     'Content-Security-Policy': [
-  //       'default-src \'self\'',
-  //       'style-src \'unsafe-inline\' \'self\'',
-  //       'script-src \'self\' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/',
-  //       'frame-src \'self\' https://www.google.com/recaptcha/',
-  //     ].join('; ')
-  //   },
-  // });
+  res.render('room', { roomId: req.params['room'] });
 });
 
+app.get('/*/style.css', function(req, res) {
+  res.sendFile(__dirname + "/public/style.css");
+});
+
+app.get('/*/script.js', function(req, res) {
+  res.sendFile(__dirname + "/public/script.js");
+});
+
+io.on('connection', (socket) => {
+  socket.on('join-room', (roomId, userId) => {
+  console.log(roomId, userId)
+  socket.join(roomId);
+  socket.to(roomId).emit('user-connected', userId);
+  });
+});
 server.listen(4000);
