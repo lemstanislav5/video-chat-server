@@ -21,11 +21,14 @@ showChat.addEventListener("click", () => {
 
 const user = prompt("Enter your name");
 
-const peer = new Peer({
-  host: 'messenger.ddns.net', port: 443, secure: true
-  // host: "localhost",
-  // port: 9000,
-  // path: "/myapp",
+// const peer = new Peer({
+//   host: 'messenger.ddns.net', port: 443, secure: true
+// });
+
+const peer = new Peer("someid", {
+  host: "localhost",
+  port: 9000,
+  path: "/myapp",
 });
 
 let myVideoStream;
