@@ -12,11 +12,7 @@ const io = require('socket.io')(server, {
 const peerServer = ExpressPeerServer(server, {
   debug: true,
 });
-app.use('/peerjs/*', (req, res, next) => {
-  console.log(req);
-  peerServer();
-  next()
-});
+app.use('/peerjs/*', peerServer);
 app.use(express.static('public'));
 app.set('view engine', 'ejs')
 app.get('/', (req, res) => res.redirect(`/${uuidv4()}/`));
