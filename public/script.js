@@ -21,11 +21,10 @@ showChat.addEventListener("click", () => {
 
 const user = prompt("Enter your name");
 
-let peer = new Peer({
-  host: 'localhost', //! до этого так было '/'
-  port: 4000,
-  path: '/peerjs',
-  debug: 3
+const peer = new Peer({
+  host: "localhost",
+  port: 9000,
+  path: "/myapp",
 });
 
 let myVideoStream;
@@ -50,7 +49,7 @@ navigator.mediaDevices
   });
 
 const connectToNewUser = (userId, stream) => {
-  console.log('I call someone' + userId);
+  console.log('I call someone: ' + userId);
   const call = peer.call(userId, stream);
   const video = document.createElement("video");
   call.on("stream", (userVideoStream) => {
@@ -59,7 +58,7 @@ const connectToNewUser = (userId, stream) => {
 };
 
 peer.on("open", (id) => {
-  console.log('my id is' + id);
+  console.log('my id is: ' + id);
   socket.emit("join-room", ROOM_ID, id, user);
 });
 

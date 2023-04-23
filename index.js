@@ -1,17 +1,15 @@
 const express = require("express");
-const { ExpressPeerServer } = require("peer");
+// const { ExpressPeerServer } = require("peer");
+const { PeerServer } = require("peer");
+const peerServer = PeerServer({ port: 9000, path: "/myapp" });
 const { v4: uuidv4 } = require("uuid");
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server, {
-  cors: {
-    origin: '*'
-  }
+  cors: { origin: '*' }
 });
 
-app.use('/peerjs', ExpressPeerServer(server, {
-  debug: true,
-}));
+// app.use('/peerjs', peerServer);
 app.use(express.static('public'));
 app.set('view engine', 'ejs')
 app.get('/', (req, res) => res.redirect(`/${uuidv4()}/`));
